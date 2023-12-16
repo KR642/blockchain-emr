@@ -1,0 +1,148 @@
+/**
+ *  Business network definition.
+ */
+namespace org.ehr.net
+
+enum Grade{
+	o Doctor
+    o Pharmacy
+    o Admin
+}
+enum RecordStatus{
+	o ACTIVE
+    o INACTIVE
+}
+concept ADDRESS{
+	o String Name optional
+    o String NameNumber default = '1'
+  	o String Street default = 'Street'
+  	o String PostCode default = 'ABC 001'
+}
+
+enum diagnosis_status{
+	o Treated
+    o Untreated
+    o Ongoing 
+}
+enum pharmacy_status{
+	o Purchased
+    o NotPurchased
+} 
+//PARTICIPANTS
+participant Doctor identified by DrId {
+  o String DrId
+  o String name
+  o String specialization
+  o String qualification
+  o String hospital
+  o Grade designation1 default = 'Doctor'
+}
+participant Admin identified by AdminId {
+  o String AdminId
+  o String name
+  o Grade designation2 default = 'Admin'
+}
+participant Patient identified by PatientId {
+  o String PatientId
+  o String name
+  o Integer age
+  o String gender
+  o ADDRESS address
+  o RecordStatus status default = 'ACTIVE'
+}
+participant Pharmacy identified by PharmaId {
+  o String PharmaId
+  o String name
+  o String pharmaRegNo
+  o Grade designation3 default = 'Pharmacy'
+}
+  
+//ASSETS
+asset Treatment identified by TreatmentId {
+  o String TreatmentId
+  o String Symptoms
+  o String Diagnosis
+  o String DiagnosisDescr
+  o String AdditionalNotes
+  o diagnosis_status status default = 'Ongoing'
+  --> Patient patient_obj
+}
+asset Prescription identified by PrescriptionId{
+  	o String PrescriptionId
+  	o String Prescriptions
+  	o pharmacy_status PharmacyStatus default = 'NotPurchased'
+	--> Patient patient_obj
+  	--> Treatment treatment_obj
+}
+asset MedicalHistory identified by MHId {
+  o String MHId
+  o String Bloodtype
+  o String Allergy
+  o String Surgery
+  o String GeneticDisorders
+  o String Description
+  --> Patient patient_obj
+}
+
+transaction initialiseAll{}
+transaction initialiseAsset{}
+
+transaction AddDoctor{
+    o Doctor doc_obj
+}
+transaction AddPharmacy{
+    o Pharmacy pharma_obj
+}
+transaction AddAdmin{
+    o Admin admin_obj
+}
+transaction RegisterPatient{
+	o Patient pat_obj
+}
+transaction RemoveDoctor{
+	o Doctor doc_obj
+}
+transaction RemoveAdmin{
+	o Admin admin_obj
+}
+transaction RemovePharmacy{
+	o Pharmacy pharma_obj
+}
+transaction AddTreatment{
+	o Treatment tt_obj
+}
+transaction AddMedicalHistory{
+	o MedicalHistory mh_obj
+}
+transaction AddPrescription{
+	o Prescription ps_obj
+}
+transaction UpdatePatientInfo{
+  	o Patient pat_obj
+}
+transaction UpdateTreatmentInfo{
+  	o Treatment tt_obj
+}
+transaction UpdateMedicalHistory{
+  	o MedicalHistory mh_obj
+}
+transaction UpdateTreatmentStatus{
+	o String Status
+  	--> Patient patient
+  	--> Treatment treatment
+}
+transaction UpdatePharmacyStatus{
+	o String Status
+  	--> Patient patient
+  	--> Treatment treatment
+  	--> Prescription prescription
+}
+transaction QueryTreatmentData{
+	--> Patient patient
+}
+transaction QueryPrescriptionData{
+	--> Patient patient
+}
+transaction QueryMedicalHistory{
+	--> Patient patient
+}

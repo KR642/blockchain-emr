@@ -1,0 +1,174 @@
+/**
+ * Access control list.
+ */
+rule DoctorDeniedToEditPharmacyStatus{
+	description: "Deny doctors to update the pharmacy status of precription"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.UpdatePharmacyStatus"
+    action: DENY
+}
+rule PharmacyAddPrescriptionStatus{
+	description: "Allow pharmacies to update the status of purchase"
+    participant: "org.ehr.net.Pharmacy"
+    operation: CREATE
+    resource: "org.ehr.net.UpdatePharmacyStatus"
+    action: ALLOW
+}
+rule DoctorToEditTreatmentStatus{
+	description: "Allow doctors to update the status of treatment"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.UpdateTreatmentStatus"
+    action: ALLOW
+}
+rule DoctorToAddPrescriptions{
+	description: "Allow doctors to add prescriptions of a patient"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.AddPrescription"
+    action: ALLOW
+}
+rule DoctorToAddTreatments{
+	description: "Allow doctors to add treatment records of a patient"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.AddTreatment"
+    action: ALLOW
+}
+rule DoctorToAddMedicalHistories{
+	description: "Allow doctors to add medical history of a patient"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.AddMedicalHistory"
+    action: ALLOW
+}
+rule DoctorToUpdateTreatments{
+	description: "Allow doctors to update treatment record"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.UpdateTreatmentInfo"
+    action: ALLOW
+}
+rule DoctorToUpdateMedicalHistory{
+	description: "Allow doctors to update medical history record"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.UpdateMedicalHistory"
+    action: ALLOW
+}
+rule DoctorToQueryTreatmentRecord{
+	description: "Allow doctors to query various treatment records of a patient"
+    participant: "org.ehr.net.Doctor"
+    operation: CREATE
+    resource: "org.ehr.net.QueryTreatmentData"
+    action: ALLOW
+}
+rule PharmacyToQueryPrescriptions{
+	description: "Allow pharmacy to query prescriptions of a patient"
+    participant: "org.ehr.net.Pharmacy"
+    operation: CREATE,READ
+    resource: "org.ehr.net.QueryPrescriptionData"
+    action: ALLOW
+}
+rule PharmacyReadsPrescription{
+	description: "Allow pharmacy to read prescriptions and update purchase status"
+    participant: "org.ehr.net.Pharmacy"
+    operation: READ,UPDATE
+    resource: "org.ehr.net.Prescription"
+    action: ALLOW
+}
+rule DoctorAccessTreatment{
+	description: "Allow Doctor to access treatment to view, add and update"
+    participant: "org.ehr.net.Doctor"
+    operation: ALL
+    resource: "org.ehr.net.Treatment"
+    action: ALLOW
+}
+rule DoctorAccessMedicalHistory{
+	description: "Allow Doctor to access medical history to view, add and update"
+    participant: "org.ehr.net.Doctor"
+    operation: ALL
+    resource: "org.ehr.net.MedicalHistory"
+    action: ALLOW
+}
+rule DoctorEditsPrescription{
+	description: "Allow Doctor access prescription to view and adding new entries"
+    participant: "org.ehr.net.Doctor"
+    operation: ALL
+    resource: "org.ehr.net.Prescription"
+    action: ALLOW
+}
+rule PartcipantsSeeBasicPatientInfo {
+    description: "Allow all participant read access to basic information of patient"
+    participant: "org.ehr.net.*"
+    operation: ALL
+    resource: "org.ehr.net.Patient"
+    action: ALLOW
+}
+rule AdminSeesDoctor {
+    description: "Allow admin to access Doctors"
+    participant: "org.ehr.net.Admin"
+    operation: ALL
+    resource: "org.ehr.net.Doctor"
+    action: ALLOW
+}
+rule AdminSeesPharmacy {
+    description: "Allow admin to access Pharmacy"
+    participant: "org.ehr.net.Admin"
+    operation: ALL
+    resource: "org.ehr.net.Pharmacy"
+    action: ALLOW
+}
+rule AdminSeesAdmin {
+    description: "Allow admin to access Admins"
+    participant: "org.ehr.net.Admin"
+    operation: ALL
+    resource: "org.ehr.net.Admin"
+    action: ALLOW
+}
+rule DoctorSeesDoctor {
+    description: "Doctor views Doctor's list"
+    participant: "org.ehr.net.Doctor"
+    operation: READ
+    resource: "org.ehr.net.Doctor"
+    action: ALLOW
+}
+rule PharmacyViewPharmacies {
+    description: "Pharmacy views Pharmacy's list"
+    participant: "org.ehr.net.Pharmacy"
+    operation: READ
+    resource: "org.ehr.net.Pharmacy"
+    action: ALLOW
+}
+rule AdminAddandRemoveParticipants{
+	description: "Allow admins to add new partcipants"
+    participant: "org.ehr.net.Admin"
+    operation: CREATE
+    resource: "org.ehr.net.*"
+    action: ALLOW
+}
+
+rule SystemACL {
+    description: "System ACL to permit all access"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

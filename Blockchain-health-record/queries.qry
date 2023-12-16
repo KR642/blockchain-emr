@@ -1,0 +1,19 @@
+/**
+ * New query file
+ */
+query TreatmentData{
+	description: "To view the treatment data of a patient, given their id"
+  	statement: SELECT org.ehr.net.Treatment WHERE(patient_obj == _$pid)	
+}
+query PrescriptionData{
+	description: "To view the prescriptions of a patient, given their id"
+  	statement: SELECT org.ehr.net.Prescription WHERE(patient_obj == _$pid)
+}
+query MedicalHistoryData{
+	description: "To view the medical history of a patient, given their id"
+  	statement: SELECT org.ehr.net.MedicalHistory WHERE(patient_obj == _$pid)
+}
+query IndividualPatient{
+	description: "To view the details of each patient, given their id"
+  	statement: SELECT org.ehr.net.Patient WHERE(PatientId == _$pid)
+}
